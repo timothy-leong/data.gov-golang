@@ -2,8 +2,10 @@ package apiobjects
 
 import (
 	"encoding/json"
-	"github.com/timothy-leong/data.gov-golang/pkg/datetime"
+	"strconv"
 	"time"
+
+	"github.com/timothy-leong/data.gov-golang/pkg/datetime"
 )
 
 type CarparkAvailability struct {
@@ -73,5 +75,35 @@ func (c *Carpark) UnmarshalJSON(data []byte) error {
 	c.CarparkNumber = intermediateCarpark.CarparkNumber
 	c.Info = intermediateCarpark.Info
 	c.UpdateDatetime = datetime.ConvertTimestampToTime(string(intermediateCarpark.UpdateDatetime))
+	return nil
+}
+
+func (c *CarparkInfo) UnmarshalJSON(data []byte) error {
+	// Unmarshal everything into strings first
+	type IntermediateCarparkInfo struct {
+		TotalLots     string `json:"total_lots"`
+		LotType       string `json:"lot_type"`
+		LotsAvailable string `json:"lots_available"`
+	}
+
+	var intermediateCarparkInfo IntermediateCarparkInfo
+	if err := json.Unmarshal(data, &intermediateCarparkInfo); err != nil {
+		return err
+	}
+
+	// Copy the lot type and translate the total lots and lots available
+	c.LotType = intermediateCarparkInfo.LotType
+	
+	totalLots, err := strconv.Atoi(intermediateCarparkInfo.TotalLots)
+	if err != nil {
+		return err
+	}
+	c.TotalLots = totalLots
+
+	lotsAvailable, err := strconv.Atoi(intermediateCarparkInfo.LotsAvailable)
+	if err != nil {
+		return err
+	}
+	c.LotsAvailable = lotsAvailable
 	return nil
 }
