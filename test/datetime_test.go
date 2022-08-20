@@ -15,3 +15,13 @@ func TestMakeQueryDateTime(t *testing.T) {
 		t.Errorf("Wrong conversion: time = %v, queryString = %v", time, queryString)
 	}
 }
+
+func TestConvertTimestampToTime(t *testing.T) {
+	timestamp := "2022-01-02T03:03:27+08:00"
+	timeValue := datetime.ConvertTimestampToTime(timestamp)
+	expectedTime := time.Date(2022, 1, 2, 3, 3, 27, 0, time.UTC)
+
+	if timeValue != expectedTime {
+		t.Errorf("Wrong conversion: timestamp = %v, converted time = %v", timestamp, timeValue)
+	}
+}

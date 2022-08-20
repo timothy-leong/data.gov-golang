@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	timestampPattern = regexp.MustCompile("^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})+08:00$")
+	timestampPattern = regexp.MustCompile(`^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\+08:00$`)
 )
 
 func MakeQueryDateTime(t time.Time) string {
