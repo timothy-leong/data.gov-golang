@@ -8,7 +8,8 @@ import (
 )
 
 var (
-	timestampPattern = regexp.MustCompile(`^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\+08:00$`)
+	timestampPattern = regexp.MustCompile(`^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\+08:00)?$`)
+	Singapore, _     = time.LoadLocation("Asia/Singapore")
 )
 
 func MakeQueryDateTime(t time.Time) string {
@@ -24,5 +25,5 @@ func ConvertTimestampToTime(s string) time.Time {
 	hour, _ := atoi(matches[4])
 	minute, _ := atoi(matches[5])
 	second, _ := atoi(matches[6])
-	return time.Date(year, time.Month(month), day, hour, minute, second, 0, time.UTC)
+	return time.Date(year, time.Month(month), day, hour, minute, second, 0, Singapore)
 }

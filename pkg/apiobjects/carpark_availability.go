@@ -32,8 +32,8 @@ type CarparkInfo struct {
 func (c *CarparkAvailability) UnmarshalJSON(data []byte) error {
 	// Unmarshal the CarparkData and leave the timestamp first
 	type IntermediateItem struct {
-		Timestamp   json.RawMessage `json:"timestamp"`
-		CarparkData []Carpark       `json:"carpark_data"`
+		Timestamp   string    `json:"timestamp"`
+		CarparkData []Carpark `json:"carpark_data"`
 	}
 
 	type IntermediateCarparkAvailability struct {
@@ -50,7 +50,7 @@ func (c *CarparkAvailability) UnmarshalJSON(data []byte) error {
 	c.Items = make([]Item, 0, len(intermediateObject.Items))
 	for _, intermediateItem := range intermediateObject.Items {
 		c.Items = append(c.Items, Item{
-			Timestamp:   datetime.ConvertTimestampToTime(string(intermediateItem.Timestamp)),
+			Timestamp:   datetime.ConvertTimestampToTime(intermediateItem.Timestamp),
 			CarparkData: intermediateItem.CarparkData,
 		})
 	}
@@ -58,11 +58,11 @@ func (c *CarparkAvailability) UnmarshalJSON(data []byte) error {
 }
 
 func (c *Carpark) UnmarshalJSON(data []byte) error {
-	// Unmarshal the Info and CarparkNumber and leave the UpdateDatetime first
+	// Unmarshal the Info and CarparkNumber and convert the UpdateDatetime to string first
 	type IntermediateCarpark struct {
-		Info           []CarparkInfo   `json:"carpark_info"`
-		CarparkNumber  string          `json:"carpark_number"`
-		UpdateDatetime json.RawMessage `json:"update_datetime"`
+		Info           []CarparkInfo `json:"carpark_info"`
+		CarparkNumber  string        `json:"carpark_number"`
+		UpdateDatetime string        `json:"update_datetime"`
 	}
 
 	var intermediateCarpark IntermediateCarpark
@@ -74,7 +74,7 @@ func (c *Carpark) UnmarshalJSON(data []byte) error {
 	// and decode the timestamp on the fly
 	c.CarparkNumber = intermediateCarpark.CarparkNumber
 	c.Info = intermediateCarpark.Info
-	c.UpdateDatetime = datetime.ConvertTimestampToTime(string(intermediateCarpark.UpdateDatetime))
+	c.UpdateDatetime = datetime.ConvertTimestampToTime(intermediateCarpark.UpdateDatetime)
 	return nil
 }
 
@@ -93,7 +93,7 @@ func (c *CarparkInfo) UnmarshalJSON(data []byte) error {
 
 	// Copy the lot type and translate the total lots and lots available
 	c.LotType = intermediateCarparkInfo.LotType
-	
+
 	totalLots, err := strconv.Atoi(intermediateCarparkInfo.TotalLots)
 	if err != nil {
 		return err
