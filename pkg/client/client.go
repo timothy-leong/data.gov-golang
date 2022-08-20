@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/timothy-leong/data.gov-golang/pkg/apiobjects"
-	"github.com/timothy-leong/data.gov-golang/pkg/endpoints"
 	"github.com/timothy-leong/data.gov-golang/pkg/datetime"
+	"github.com/timothy-leong/data.gov-golang/pkg/endpoints"
 	"github.com/valyala/fasthttp"
 )
 
