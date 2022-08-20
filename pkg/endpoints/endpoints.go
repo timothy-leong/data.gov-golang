@@ -11,7 +11,7 @@ const (
 	PollutionStandardsIndex       RealAPIEndpoint = RealTimeDomain + "/environment/psi"
 	RealtimeWeatherReadings       RealAPIEndpoint = RealTimeDomain + "/environment/air-temperature"
 	UltravioletIndex              RealAPIEndpoint = RealTimeDomain + "/environment/uv-index"
-	TrafficImages                 RealAPIEndpoint = RealTimeDomain + "/dataset/traffic-images"
+	TrafficImages                 RealAPIEndpoint = RealTimeDomain + "/transport/traffic-images"
 	Pm25                          RealAPIEndpoint = RealTimeDomain + "/environment/pm25"
 	TwoHourWeatherForecast        RealAPIEndpoint = RealTimeDomain + "/environment/2-hour-weather-forecast"
 	TwentyFourHourWeatherForecast RealAPIEndpoint = RealTimeDomain + "/environment/24-hour-weather-forecast"

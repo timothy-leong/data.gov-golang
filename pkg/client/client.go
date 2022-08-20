@@ -36,6 +36,8 @@ func (d *DataGovClient) refreshRate(key endpoints.RealAPIEndpoint) (rate time.Du
 	switch key {
 	case endpoints.CarparkAvailability:
 		return time.Minute
+	case endpoints.TrafficImages:
+		return 20 * time.Second
 	}
 	return
 }
@@ -46,6 +48,12 @@ func (d *DataGovClient) checkPreviousValue(key endpoints.RealAPIEndpoint, t time
 		case endpoints.CarparkAvailability:
 			lastFetchedValue := value.(apiobjects.CarparkAvailability)
 			refreshRate := d.refreshRate(endpoints.CarparkAvailability)
+			if lastFetchedValue.Timestamp.Add(refreshRate).After(t) {
+				return value, true
+			}
+		case endpoints.TrafficImages:
+			lastFetchedValue := value.(apiobjects.TrafficImages)
+			refreshRate := d.refreshRate(endpoints.TrafficImages)
 			if lastFetchedValue.Timestamp.Add(refreshRate).After(t) {
 				return value, true
 			}
@@ -67,13 +75,8 @@ func (d *DataGovClient) CarparkAvailability(t time.Time) (*apiobjects.CarparkAva
 
 	statusCode, body, err := fasthttp.Get([]byte{}, url)
 
-	if err != nil {
-		fmt.Println("Cannot fetch carpark availability:", err)
-		return nil, err
-	}
-
-	if statusCode != fasthttp.StatusOK {
-		fmt.Println("Status was not OK:", statusCode)
+	if err != nil || statusCode != fasthttp.StatusOK {
+		fmt.Printf("Cannot fetch carpark availability: err = %v, status = %v\n", err, statusCode)
 		return nil, err
 	}
 
@@ -100,13 +103,8 @@ func (d *DataGovClient) TrafficImages(t time.Time) (*apiobjects.TrafficImages, e
 
 	statusCode, body, err := fasthttp.Get([]byte{}, url)
 
-	if err != nil {
-		fmt.Println("Cannot fetch traffic images:", err)
-		return nil, err
-	}
-
-	if statusCode != fasthttp.StatusOK {
-		fmt.Println("Status was not OK:", statusCode)
+	if err != nil || statusCode != fasthttp.StatusOK {
+		fmt.Printf("Cannot fetch traffic images: err = %v, status = %v\n", err, statusCode)
 		return nil, err
 	}
 
