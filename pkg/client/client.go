@@ -43,7 +43,8 @@ func (d *DataGovClient) checkPreviousValue(key string, t time.Time) (prevValue a
 		switch key {
 		case endpoints.CarparkAvailability:
 			lastFetchedValue := value.(apiobjects.CarparkAvailability)
-			if lastFetchedValue.Items[0].Timestamp.Add(d.refreshRate(endpoints.CarparkAvailability)).After(t) {
+			refreshRate := d.refreshRate(endpoints.CarparkAvailability)
+			if lastFetchedValue.Items[0].Timestamp.Add(refreshRate).After(t) {
 				return value, true
 			}
 		}
