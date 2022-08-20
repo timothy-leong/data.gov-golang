@@ -13,6 +13,9 @@ var (
 )
 
 func MakeQueryDateTime(t time.Time) string {
+	// Need to translate the given time into UTC+8 time
+	// in case the user's computer is set to a different timezone
+	t = t.In(Singapore)
 	return fmt.Sprintf("%04d-%02d-%02dT%02d:%02d:%02d", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
 }
 

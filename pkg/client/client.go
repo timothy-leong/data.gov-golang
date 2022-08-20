@@ -57,7 +57,8 @@ func (d *DataGovClient) checkPreviousValue(key endpoints.RealAPIEndpoint, t time
 func (d *DataGovClient) CarparkAvailability(t time.Time) (*apiobjects.CarparkAvailability, error) {
 	// Check cache for a previously fetched value
 	if value, ok := d.checkPreviousValue(endpoints.CarparkAvailability, t); ok {
-		return value.(*apiobjects.CarparkAvailability), nil
+		returnValue := value.(apiobjects.CarparkAvailability)
+		return &returnValue, nil
 	}
 
 	params := url.Values{}
@@ -83,5 +84,38 @@ func (d *DataGovClient) CarparkAvailability(t time.Time) (*apiobjects.CarparkAva
 	}
 
 	d.cache[endpoints.CarparkAvailability] = result
+	return &result, nil
+}
+
+func (d *DataGovClient) TrafficImages(t time.Time) (*apiobjects.TrafficImages, error) {
+	// Check cache for a previously fetched value
+	if value, ok := d.checkPreviousValue(endpoints.TrafficImages, t); ok {
+		returnValue := value.(apiobjects.TrafficImages)
+		return &returnValue, nil
+	}
+
+	params := url.Values{}
+	params.Add("date_time", datetime.MakeQueryDateTime(t))
+	url := string(endpoints.TrafficImages) + "?" + params.Encode()
+
+	statusCode, body, err := fasthttp.Get([]byte{}, url)
+
+	if err != nil {
+		fmt.Println("Cannot fetch traffic images:", err)
+		return nil, err
+	}
+
+	if statusCode != fasthttp.StatusOK {
+		fmt.Println("Status was not OK:", statusCode)
+		return nil, err
+	}
+
+	var result apiobjects.TrafficImages
+	if err = json.Unmarshal(body, &result); err != nil {
+		fmt.Println("Could not unmarshal traffic image results", err)
+		return nil, err
+	}
+
+	d.cache[endpoints.TrafficImages] = result
 	return &result, nil
 }
