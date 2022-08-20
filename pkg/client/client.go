@@ -3,10 +3,12 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/timothy-leong/data.gov-golang/pkg/apiobjects"
 	"github.com/timothy-leong/data.gov-golang/pkg/endpoints"
+	"github.com/timothy-leong/data.gov-golang/pkg/datetime"
 	"github.com/valyala/fasthttp"
 )
 
@@ -58,7 +60,11 @@ func (d *DataGovClient) CarparkAvailability(t time.Time) (*apiobjects.CarparkAva
 		return value.(*apiobjects.CarparkAvailability), nil
 	}
 
-	statusCode, body, err := fasthttp.Get([]byte{}, string(endpoints.CarparkAvailability))
+	params := url.Values{}
+	params.Add("date_time", datetime.MakeQueryDateTime(t))
+	url := string(endpoints.CarparkAvailability) + "?" + params.Encode()
+
+	statusCode, body, err := fasthttp.Get([]byte{}, url)
 
 	if err != nil {
 		fmt.Println("Cannot fetch carpark availability:", err)
