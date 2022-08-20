@@ -55,8 +55,10 @@ func (i *Image) UnmarshalJSON(data []byte) error {
 
 func (t *TrafficImages) UnmarshalJSON(data []byte) error {
 	type intermediateTrafficImage struct {
-		Timestamp string  `json:"timestamp"`
-		Images    []Image `json:"cameras"`
+		Items []struct {
+			Timestamp string  `json:"timestamp"`
+			Images    []Image `json:"cameras"`
+		} `json:"items"`
 	}
 
 	var obj intermediateTrafficImage
@@ -64,7 +66,7 @@ func (t *TrafficImages) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	t.Timestamp = datetime.ConvertTimestampToTime(obj.Timestamp)
-	t.Images = obj.Images
+	t.Timestamp = datetime.ConvertTimestampToTime(obj.Items[0].Timestamp)
+	t.Images = obj.Items[0].Images
 	return nil
 }
