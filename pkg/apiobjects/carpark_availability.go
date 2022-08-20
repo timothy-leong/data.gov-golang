@@ -27,7 +27,7 @@ type CarparkInfo struct {
 	LotsAvailable int    `json:"lots_available"`
 }
 
-func (c *CarparkAvailability) UnmarshalJSON(data []byte) (err error) {
+func (c *CarparkAvailability) UnmarshalJSON(data []byte) error {
 	// Unmarshal the CarparkData and leave the timestamp first
 	type IntermediateItem struct {
 		Timestamp   json.RawMessage `json:"timestamp"`
@@ -39,7 +39,7 @@ func (c *CarparkAvailability) UnmarshalJSON(data []byte) (err error) {
 	}
 
 	var intermediateObject IntermediateCarparkAvailability
-	if err = json.Unmarshal(data, &intermediateObject); err != nil {
+	if err := json.Unmarshal(data, &intermediateObject); err != nil {
 		return err
 	}
 
@@ -52,10 +52,10 @@ func (c *CarparkAvailability) UnmarshalJSON(data []byte) (err error) {
 			CarparkData: intermediateItem.CarparkData,
 		})
 	}
-	return
+	return nil
 }
 
-func (c *Carpark) UnmarshalJSON(data []byte) (err error) {
+func (c *Carpark) UnmarshalJSON(data []byte) error {
 	// Unmarshal the Info and CarparkNumber and leave the UpdateDatetime first
 	type IntermediateCarpark struct {
 		Info           []CarparkInfo   `json:"carpark_info"`
@@ -64,7 +64,7 @@ func (c *Carpark) UnmarshalJSON(data []byte) (err error) {
 	}
 
 	var intermediateCarpark IntermediateCarpark
-	if err = json.Unmarshal(data, &intermediateCarpark); err != nil {
+	if err := json.Unmarshal(data, &intermediateCarpark); err != nil {
 		return err
 	}
 
@@ -73,5 +73,5 @@ func (c *Carpark) UnmarshalJSON(data []byte) (err error) {
 	c.CarparkNumber = intermediateCarpark.CarparkNumber
 	c.Info = intermediateCarpark.Info
 	c.UpdateDatetime = datetime.ConvertTimestampToTime(string(intermediateCarpark.UpdateDatetime))
-	return
+	return nil
 }
