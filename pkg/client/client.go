@@ -33,11 +33,10 @@ func NewDataGovClient() *DataGovClient {
 func (d *DataGovClient) CarparkAvailability(t time.Time) (*apiobjects.CarparkAvailability, error) {
 	// Check cache for a previously fetched value
 	if value, ok := d.cache[endpoints.CarparkAvailability]; ok {
-		// Check when it was updated
 		lastFetchedValue := value.(apiobjects.CarparkAvailability)
 		const refreshRate = time.Minute
 
-		if lastFetchedValue.Items[0].Timestamp.Add(refreshRate).After(time.Now()) {
+		if lastFetchedValue.Items[0].Timestamp.Add(refreshRate).After(t) {
 			return &lastFetchedValue, nil
 		}
 	}
@@ -60,5 +59,6 @@ func (d *DataGovClient) CarparkAvailability(t time.Time) (*apiobjects.CarparkAva
 		return nil, err
 	}
 
+	d.cache[endpoints.CarparkAvailability] = result
 	return &result, nil
 }
