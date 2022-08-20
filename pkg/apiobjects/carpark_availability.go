@@ -15,18 +15,14 @@ type CarparkInfo struct {
 }
 
 type Carpark struct {
-	Info           []CarparkInfo `json:"carpark_info"`
-	CarparkNumber  string        `json:"carpark_number"`
-	UpdateDatetime time.Time     `json:"update_datetime"`
-}
-
-type Item struct {
-	Timestamp   time.Time `json:"timestamp"`
-	CarparkData []Carpark `json:"carpark_data"`
+	Info           CarparkInfo `json:"carpark_info"`
+	CarparkNumber  string      `json:"carpark_number"`
+	UpdateDatetime time.Time   `json:"update_datetime"`
 }
 
 type CarparkAvailability struct {
-	Items []Item `json:"items"`
+	Timestamp   time.Time `json:"timestamp"`
+	CarparkData []Carpark `json:"carpark_data"`
 }
 
 func (c *CarparkAvailability) UnmarshalJSON(data []byte) error {
@@ -47,13 +43,9 @@ func (c *CarparkAvailability) UnmarshalJSON(data []byte) error {
 
 	// Copy the CarparkData into the actual object and
 	// decode the timestamp on-the-fly
-	c.Items = make([]Item, 0, len(intermediateObject.Items))
-	for _, intermediateItem := range intermediateObject.Items {
-		c.Items = append(c.Items, Item{
-			Timestamp:   datetime.ConvertTimestampToTime(intermediateItem.Timestamp),
-			CarparkData: intermediateItem.CarparkData,
-		})
-	}
+	c.Timestamp = datetime.ConvertTimestampToTime(intermediateObject.Items[0].Timestamp)
+	c.CarparkData = intermediateObject.Items[0].CarparkData
+
 	return nil
 }
 
@@ -73,7 +65,7 @@ func (c *Carpark) UnmarshalJSON(data []byte) error {
 	// Copy the Info and CarparkNumber into the actual object
 	// and decode the timestamp on the fly
 	c.CarparkNumber = intermediateCarpark.CarparkNumber
-	c.Info = intermediateCarpark.Info
+	c.Info = intermediateCarpark.Info[0]
 	c.UpdateDatetime = datetime.ConvertTimestampToTime(intermediateCarpark.UpdateDatetime)
 	return nil
 }

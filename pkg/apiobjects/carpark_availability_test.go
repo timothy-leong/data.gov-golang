@@ -54,8 +54,8 @@ func TestUnmarshalCarpark(t *testing.T) {
 	}
 
 	// Make sure the carpark info was unmarshalled
-	if actualCarpark.Info[0].TotalLots != 105 {
-		t.Errorf("Expected total lots to be 105, got: %v", actualCarpark.Info[0].TotalLots)
+	if actualCarpark.Info.TotalLots != 105 {
+		t.Errorf("Expected total lots to be 105, got: %v", actualCarpark.Info.TotalLots)
 	}
 
 	if actualCarpark.CarparkNumber != "HE12" {
@@ -96,12 +96,12 @@ func TestUnmarshalCarparkAvailability(t *testing.T) {
 	}
 
 	expectedTime := time.Date(2022, 8, 20, 8, 52, 27, 0, datetime.Singapore)
-	if actualTimestamp := actualCarparkAvailability.Items[0].Timestamp; expectedTime != actualTimestamp {
+	if actualTimestamp := actualCarparkAvailability.Timestamp; expectedTime != actualTimestamp {
 		t.Errorf("Expected timestamp to be %v, got %v", expectedTime, actualTimestamp)
 	}
 
 	// Do a brief check for the carpark data
-	if carparkNumber := actualCarparkAvailability.Items[0].CarparkData[0].CarparkNumber; carparkNumber != "HE12" {
+	if carparkNumber := actualCarparkAvailability.CarparkData[0].CarparkNumber; carparkNumber != "HE12" {
 		t.Errorf("Expected carpark number of first carpark to be %v, got %v instead", "HE12", carparkNumber)
 	}
 }
