@@ -8,13 +8,10 @@ import (
 	"github.com/timothy-leong/data.gov-golang/pkg/datetime"
 )
 
-type CarparkAvailability struct {
-	Items []Item `json:"items"`
-}
-
-type Item struct {
-	Timestamp   time.Time `json:"timestamp"`
-	CarparkData []Carpark `json:"carpark_data"`
+type CarparkInfo struct {
+	TotalLots     int    `json:"total_lots"`
+	LotType       string `json:"lot_type"`
+	LotsAvailable int    `json:"lots_available"`
 }
 
 type Carpark struct {
@@ -23,10 +20,13 @@ type Carpark struct {
 	UpdateDatetime time.Time     `json:"update_datetime"`
 }
 
-type CarparkInfo struct {
-	TotalLots     int    `json:"total_lots"`
-	LotType       string `json:"lot_type"`
-	LotsAvailable int    `json:"lots_available"`
+type Item struct {
+	Timestamp   time.Time `json:"timestamp"`
+	CarparkData []Carpark `json:"carpark_data"`
+}
+
+type CarparkAvailability struct {
+	Items []Item `json:"items"`
 }
 
 func (c *CarparkAvailability) UnmarshalJSON(data []byte) error {
