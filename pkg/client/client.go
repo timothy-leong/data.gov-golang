@@ -21,16 +21,16 @@ import (
 type DataGovClient struct {
 	// The key is the API endpoint, and the value is the struct
 	// that was last retrieved from this endpoint
-	cache map[string]any
+	cache map[endpoints.RealAPIEndpoint]any
 }
 
 func NewDataGovClient() *DataGovClient {
 	return &DataGovClient{
-		cache: make(map[string]any),
+		cache: make(map[endpoints.RealAPIEndpoint]any),
 	}
 }
 
-func (d *DataGovClient) refreshRate(key string) (rate time.Duration) {
+func (d *DataGovClient) refreshRate(key endpoints.RealAPIEndpoint) (rate time.Duration) {
 	switch key {
 	case endpoints.CarparkAvailability:
 		return time.Minute
@@ -38,7 +38,7 @@ func (d *DataGovClient) refreshRate(key string) (rate time.Duration) {
 	return
 }
 
-func (d *DataGovClient) checkPreviousValue(key string, t time.Time) (prevValue any, exists bool) {
+func (d *DataGovClient) checkPreviousValue(key endpoints.RealAPIEndpoint, t time.Time) (prevValue any, exists bool) {
 	if value, ok := d.cache[key]; ok {
 		switch key {
 		case endpoints.CarparkAvailability:
@@ -58,7 +58,7 @@ func (d *DataGovClient) CarparkAvailability(t time.Time) (*apiobjects.CarparkAva
 		return value.(*apiobjects.CarparkAvailability), nil
 	}
 
-	statusCode, body, err := fasthttp.Get([]byte{}, endpoints.CarparkAvailability)
+	statusCode, body, err := fasthttp.Get([]byte{}, string(endpoints.CarparkAvailability))
 
 	if err != nil {
 		fmt.Println("Cannot fetch carpark availability:", err)

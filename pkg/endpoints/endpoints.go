@@ -1,15 +1,17 @@
 package endpoints
 
+type RealAPIEndpoint string
+
 // Real-time APIs
 const (
-	RealTimeDomain          = "https://api.data.gov.sg/v1"
-	CarparkAvailability     = RealTimeDomain + "/transport/carpark-availability"
-	TaxiAvailability        = RealTimeDomain + "/transport/taxi-availability"
-	IposApplications        = RealTimeDomain + "/technology/ipos/designs"
-	PollutionStandardsIndex = RealTimeDomain + "/environment/psi"
-	RealtimeWeatherReadings = RealTimeDomain + "/environment/air-temperature"
-	UltravioletIndex        = RealTimeDomain + "/environment/uv-index"
-	TrafficImages           = RealTimeDomain + "/dataset/traffic-images"
-	Pm25                    = RealTimeDomain + "/environment/pm25"
-	WeatherForecast         = RealTimeDomain + "/environment/2-hour-weather-forecast"
+	RealTimeDomain          RealAPIEndpoint = "https://api.data.gov.sg/v1"
+	CarparkAvailability     RealAPIEndpoint = RealTimeDomain + "/transport/carpark-availability"
+	TaxiAvailability        RealAPIEndpoint = RealTimeDomain + "/transport/taxi-availability"
+	IposApplications        RealAPIEndpoint = RealTimeDomain + "/technology/ipos/designs"
+	PollutionStandardsIndex RealAPIEndpoint = RealTimeDomain + "/environment/psi"
+	RealtimeWeatherReadings RealAPIEndpoint = RealTimeDomain + "/environment/air-temperature"
+	UltravioletIndex        RealAPIEndpoint = RealTimeDomain + "/environment/uv-index"
+	TrafficImages           RealAPIEndpoint = RealTimeDomain + "/dataset/traffic-images"
+	Pm25                    RealAPIEndpoint = RealTimeDomain + "/environment/pm25"
+	WeatherForecast         RealAPIEndpoint = RealTimeDomain + "/environment/2-hour-weather-forecast"
 )
