@@ -21,7 +21,6 @@ func TestCarparkAvailability(t *testing.T) {
 	}
 }
 
-
 func TestTrafficImages(t *testing.T) {
 	client := NewDataGovClient()
 	_, err := client.TrafficImages(time.Now())
