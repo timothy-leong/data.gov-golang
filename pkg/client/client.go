@@ -53,7 +53,7 @@ func (d *DataGovClient) checkPreviousValue(key endpoints.RealAPIEndpoint, t time
 			if lastFetchedValue.Timestamp.Add(refreshRate).After(t) {
 				return value, true
 			}
-		case endpoints.UvIndex:
+		case endpoints.UvIndex: // TODO: How to cache endpoints with different params?
 			lastFetchedValue := value.(apiobjects.UVReadingAPIResponse)
 			refreshRate := d.refreshRate(endpoints.UvIndex)
 			if lastFetchedValue.Items[len(lastFetchedValue.Items)-1].Timestamp.Add(refreshRate).After(t) {
